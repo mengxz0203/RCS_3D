@@ -82,11 +82,19 @@ def find_3d_screen_image_region(img):
 
     polyContours = cv2.approxPolyDP(contours[maxArea], 10, True)
 
-    hull = []
+    x = []
+    y = []
+    hull_list = []
     length = len(polyContours)
     for index in range(length):
         hull = cv2.convexHull(polyContours[index])
-        print(hull)
+        hull_list.append(hull[0][0])
+        print(hull[0][0][0], hull[0][0][1])
+        x = hull[0][0][0]
+        y = hull[0][0][1]
+    print("hull_list:", hull_list)
+    print(x)
+    print(y)
 
     polyPic = np.zeros((h, w, 3))
     # cv2.drawContours(polyPic, polyContours, -1, (0, 255, 0), 1)
@@ -98,8 +106,9 @@ def find_3d_screen_image_region(img):
     cv2.imshow("poly", shrinkedPic)
     cv2.waitKey()
 
-    points1 = np.float32([[133, 144], [1036, 143], [135, 714], [1038, 706]])
-    points2 = np.float32([[0, 0], [w, 0], [0, h], [w, h]])
+    points1 = np.float32([[1036, 143], [133, 144],  [135, 714], [1038, 706]])
+    # points1 = np.float32([])
+    points2 = np.float32([[w, 0], [0, 0],  [0, h], [w, h]])
 
     # 计算得到转换矩阵
     M = cv2.getPerspectiveTransform(points1, points2)
