@@ -9,6 +9,7 @@ def find_3d_screen_image_region(img):
 
     # 缩小尺寸
     shrinkedPic = cv2.pyrDown(img)
+    showPic = cv2.pyrDown(shrinkedPic)
     shrinkedPic = cv2.pyrDown(shrinkedPic)
     # cv2.imshow("img", shrinkedPic)
     # cv2.waitKey()
@@ -97,8 +98,18 @@ def find_3d_screen_image_region(img):
     cv2.imshow("poly", shrinkedPic)
     cv2.waitKey()
 
-    # cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    points1 = np.float32([[133, 144], [1036, 143], [135, 714], [1038, 706]])
+    points2 = np.float32([[0, 0], [w, 0], [0, h], [w, h]])
+
+    # 计算得到转换矩阵
+    M = cv2.getPerspectiveTransform(points1, points2)
+
+    print("M:", M)
+    # 实现透视变换转换
+    processed = cv2.warpPerspective(showPic, M, (w, h))
+
+    cv2.imshow("processed", processed)
+    cv2.waitKey()
     return hull
 
 
@@ -112,4 +123,4 @@ if __name__ == "__main__":
     # img = cv2.imread('../img/b.jpg')
     IMG = cv2.imread('../img/c.jpg')
     # img = cv2.imread('../img/pic.png')
-    contour(IMG)
+    find_3d_screen_image_region(IMG)
