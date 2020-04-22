@@ -105,6 +105,7 @@ def find_3d_screen_image_region(img):
     M = cv2.getPerspectiveTransform(points1, points2)
 
     print("M:", M)
+
     # 实现透视变换转换
     processed = cv2.warpPerspective(showPic, M, (w, h))
 
