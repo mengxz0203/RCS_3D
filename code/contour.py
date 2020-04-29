@@ -20,16 +20,16 @@ def find_3d_screen_image_region(img):
     # cv2.waitKey()
 
     # 中值滤波降噪
-    # median = cv2.medianBlur(gray, 7)
-    # cv2.imshow("medianBlur", median)
-    # cv2.waitKey()
-    blur = cv2.GaussianBlur(gray, (5, 5), 0)
-    cv2.imshow("medianBlur", blur)
+    median = cv2.medianBlur(gray, 9)
+    cv2.imshow("medianBlur", median)
     cv2.waitKey()
+    # blur = cv2.GaussianBlur(gray, (5, 5), 0)
+    # cv2.imshow("medianBlur", blur)
+    # cv2.waitKey()
 
     # 二值化
     # ret, binary = cv2.threshold(median, 40, 255, cv2.THRESH_BINARY)
-    binary = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, thresholdBlocksize, 2)
+    binary = cv2.adaptiveThreshold(median, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, thresholdBlocksize, 2)
     # ret, binary = cv2.threshold(median, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     # print("ret", ret)
     cv2.imshow("binary", binary)
@@ -117,6 +117,7 @@ def find_3d_screen_image_region(img):
     processed = cv2.warpPerspective(showPic, M, (w, h))
 
     cv2.imshow("processed", processed)
+    cv2.imwrite("../result/screen/processed2.jpg", processed)
     cv2.waitKey()
     return hull
 
