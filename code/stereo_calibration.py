@@ -12,8 +12,8 @@ def calibration(des='01', data_file='/Users/mengxiangzhen/Desktop/实验室/left
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
     # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
-    objp = np.zeros((6 * 7, 3), np.float32)
-    objp[:, :2] = np.mgrid[0:7, 0:6].T.reshape(-1, 2)
+    objp = np.zeros((6 * 9, 3), np.float32)
+    objp[:, :2] = np.mgrid[0:9, 0:6].T.reshape(-1, 2)
 
     # Arrays to store object points and image points from all the images.
     objpoints = []  # 3d point in real world space
@@ -22,8 +22,8 @@ def calibration(des='01', data_file='/Users/mengxiangzhen/Desktop/实验室/left
     objpoints_r = []
     imgpoints_r = []
 
-    images = glob.glob('../left/*.jpg')
-    images_r = glob.glob('../right/*.jpg')
+    images = glob.glob('../left1/*.jpg')
+    images_r = glob.glob('../right1/*.jpg')
     images.sort()
     images_r.sort()
 
@@ -35,12 +35,13 @@ def calibration(des='01', data_file='/Users/mengxiangzhen/Desktop/实验室/left
         gray_r = cv2.cvtColor(img_r, cv2.COLOR_BGR2GRAY)
 
         # Find the chess board corners
-        ret, corners = cv2.findChessboardCorners(gray, (7, 6), None)
-        ret_r, corners_r = cv2.findChessboardCorners(gray_r, (7, 6), None)
+        ret, corners = cv2.findChessboardCorners(gray, (9, 6), None)
+        ret_r, corners_r = cv2.findChessboardCorners(gray_r, (9, 6), None)
 
         # If found, add object points, image points (after refining them)
         if ret == True and ret_r == True:
             objpoints.append(objp)
+
             objpoints_r.append(objp)
 
             corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1),
@@ -57,7 +58,7 @@ def calibration(des='01', data_file='/Users/mengxiangzhen/Desktop/实验室/left
     ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints,
                                                        gray.shape[::-1], None,
                                                        None)
-    img = cv2.imread('../left/left' + str(des) + '.jpg')
+    img = cv2.imread('../left1/left' + str(des) + '.jpg')
     h, w = img.shape[:2]
     newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1,
                                                       (w, h))
@@ -72,7 +73,7 @@ def calibration(des='01', data_file='/Users/mengxiangzhen/Desktop/实验室/left
                                                            imgpoints_r,
                                                            gray_r.shape[::-1],
                                                            None, None)
-    img_r = cv2.imread('../right/right' + str(des) + '.jpg')
+    img_r = cv2.imread('../right1/right' + str(des) + '.jpg')
     h, w = img_r.shape[:2]
     newcameramtx_r, roi = cv2.getOptimalNewCameraMatrix(mtx_r, dist_r, (w, h),
                                                         1, (w, h))
@@ -87,10 +88,13 @@ def calibration(des='01', data_file='/Users/mengxiangzhen/Desktop/实验室/left
         cv2.stereoCalibrate(objpoints, imgpoints, imgpoints_r, mtx,
                             dist, mtx_r, dist_r, gray.shape[::-1])
 
-    R = np.array([[1, -0.0032, -0.005], [0.0033, 0.9999, 0.0096],
-                  [0.0057, -0.0097, 0.9999]])
-    T = np.array([-83.0973, 1.0605, 0.0392])
+    # R = np.array([[1, -0.0032, -0.005], [0.0033, 0.9999, 0.0096],
+    #               [0.0057, -0.0097, 0.9999]])
+    # T = np.array([-83.0973, 1.0605, 0.0392])
     # TODO: import mat and read stat from mat file.
+
+    print("R", R)
+    print("T", T)
 
     R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(
         cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2,
@@ -105,10 +109,10 @@ def calibration(des='01', data_file='/Users/mengxiangzhen/Desktop/实验室/left
                                                          P2, gray.shape[::-1],
                                                          cv2.INTER_NEAREST)
 
-    img = cv2.imread('../left/left' + str(des) + '.jpg')
+    img = cv2.imread('../left1/left' + str(des) + '.jpg')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    img = cv2.imread(('../right/right' + str(des) + '.jpg'))
+    img = cv2.imread(('../right1/right' + str(des) + '.jpg'))
     gray_r = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     des_l = cv2.remap(gray, left_map1, left_map2, cv2.INTER_LINEAR)

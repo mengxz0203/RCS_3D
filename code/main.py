@@ -14,11 +14,22 @@ class Config(object):
     stereo_calib = True  # 是否进行双目校正
     disp_stereo_calib = True  # 是否展示双目校正结果
     disparity = True  # 是否利用视差估算距离
-    R = dict({'01': np.array([[1, -0.0032, -0.005], [0.0033, 0.9999, 0.0096],
-                              [0.0057, -0.0097, 0.9999]])})  # 由 MATLAB 标定的旋转矩阵
-    T = dict({'01': np.array([-83.0973, 1.0605, 0.0392])})  # 由 MATLAB 标定的平移矩阵
+
+    # R = dict({'01': np.array([[1, -0.0032, -0.005], [0.0033, 0.9999, 0.0096],
+    #                           [0.0057, -0.0097, 0.9999]])})  # 由 MATLAB 标定的旋转矩阵
+    # T = dict({'01': np.array([-83.0973, 1.0605, 0.0392])})  # 由 MATLAB 标定的平移矩阵
+
+    # R = dict({'01': np.array([[1, 4.9271, 0.0144], [-6.8177, 0.9999, 0.0132],
+    #                           [-0.0144, -0.0132, 0.9999]])})  # 由 MATLAB 标定的旋转矩阵
+    # T = dict({'01': np.array([-61.6316, -0.8443, -11.6220])})  # 由 MATLAB 标定的平移矩阵
     # TODO: 补充其他图像的R和T
-    matlab = False  # 在双目校正时是否使用 matlab 标定的值
+    R = dict({'01': np.array([[1, 9.4641, -5.2877], [-1.0470, 0.9998, -0.0191],
+                               [5.2687, 0.0191, 0.9999]])})  # 由 MATLAB 标定的旋转矩阵
+    # om = np.array([0.0168, -0.0047, -0.0000])
+    # R = cv2.Rodrigues(om)[0]
+    # print("test", R)
+    T = dict({'01': np.array([-58.9848, -0.4323, -4.6379])})  # 由 MATLAB 标定的平移矩阵
+    matlab = True  # 在双目校正时是否使用 matlab 标定的值
     num = 3  # StereoSGBM_create 函数参数：最小可能的差异值
     blockSize = 5  # StereoSGBM_create 函数参数：匹配的块大小。
 
@@ -205,6 +216,7 @@ def calibration(**kwargs):
         exit(0)
     elif key == ord("s"):
         cv2.imwrite("../result/disparity/disparity"+opt.sample+".png", disp)
+
 
 
 if __name__ == '__main__':
