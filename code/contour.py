@@ -116,30 +116,6 @@ def find_3d_screen_image_region(img):
     return hull, processed
 
 
-def template_match():
-    template = cv2.imread('weibo_ipad.png', 1)
-    target = cv2.imread('images/1.jpg', 1)
-    # target = cv.pyrDown(target)
-    # target = cv.pyrDown(target)
-    cv2.imshow('template image', template)
-    cv2.imshow('target image', target)
-    # cv.imwrite('images/test.jpg', target)
-    methods = [cv2.TM_SQDIFF_NORMED, cv2.TM_CCOEFF_NORMED, cv2.TM_CCORR_NORMED]
-    th, tw = template.shape[:2]
-    for md in methods:
-        print(md)
-        result = cv2.matchTemplate(target, template, md)
-        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-        if md == cv2.TM_SQDIFF_NORMED:
-            tl = min_loc
-        else:
-            tl = max_loc
-        br = (tl[0] + tw, tl[1] + th)
-        cv2.rectangle(target, tl, br, (0, 0, 255), 2)
-        cv2.imshow('match' + np.str(md), target)
-    return tl, br
-
-
 if __name__ == "__main__":
     # 读入图片
     # img = cv2.imread('../img/IMG_2961.JPG')

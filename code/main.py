@@ -84,6 +84,7 @@ def calibration(**kwargs):
 
             # 显示角点
             if opt.disp_calib:
+                img = cv2.drawChessboardCorners(img, (9, 6), corners2, ret)
                 cv2.imshow('img', img)
                 cv2.waitKey(500)
 
