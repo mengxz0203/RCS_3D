@@ -89,6 +89,8 @@ def find_3d_screen_image_region(img):
         x.append(coords)
     print("hull_list:", hull_list)
     print(x)
+    print(x[0][0])
+    print(x[0][1])
 
     polyPic = np.zeros((h, w, 3))
     # cv2.drawContours(polyPic, polyContours, -1, (0, 255, 0), 1)
@@ -113,7 +115,7 @@ def find_3d_screen_image_region(img):
     cv2.imshow("processed", processed)
     cv2.imwrite("../result/screen/processed2.jpg", processed)
     cv2.waitKey()
-    return hull, processed
+
 
 
 if __name__ == "__main__":
