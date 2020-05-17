@@ -113,7 +113,7 @@ def find_3d_screen_image_region(img):
     processed = cv2.warpPerspective(showPic, M, (w, h))
 
     cv2.imshow("processed", processed)
-    cv2.imwrite("../result/screen/processed2.jpg", processed)
+    cv2.imwrite("../images/result/screen/processed2.jpg", processed)
     cv2.waitKey()
 
 
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     # IMG = cv2.imread('../img/IMG_4238.JPG')
     # img = cv2.imread('../img/IMG_4380.JPG')
     # img = cv2.imread('../img/a.jpg')
-    IMG = cv2.imread('../img/b.jpg')
+    IMG = cv2.imread('../images/origion/b.jpg')
     # IMG = cv2.imread('../img/c.jpg')
     # img = cv2.imread('../img/pic.png')
     find_3d_screen_image_region(IMG)

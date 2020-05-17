@@ -58,13 +58,13 @@ def __patch_size(size):
 
 
 def read_template():
-    template = cv2.imread('../template/qq.png')
+    template = cv2.imread('../images/template/qq.png')
     show_image(template)
     return template
 
 
 def read_target():
-    target = cv2.imread('../images/processed.jpg')
+    target = cv2.imread('../images/screen/processed.jpg')
     # target = cv.pyrDown(target)
     # target = cv.pyrDown(target)
     show_image(target)

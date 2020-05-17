@@ -3,7 +3,7 @@ import numpy as np
 
 
 def read_template():
-    template = cv2.imread('../template/weibo_ipad.png', 1)
+    template = cv2.imread('../images/template/weibo_ipad.png', 1)
     cv2.imshow('template image', template)
     # cv2.waitKey(0)
     return template

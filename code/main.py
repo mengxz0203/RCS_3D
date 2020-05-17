@@ -54,8 +54,8 @@ def calibration(**kwargs):
     objpoints_r = []
     imgpoints_r = []
 
-    images = glob.glob('../left/*.jpg')
-    images_r = glob.glob('../right/*.jpg')
+    images = glob.glob('../images/left/*.jpg')
+    images_r = glob.glob('../images/right/*.jpg')
     images.sort()
     images_r.sort()
 

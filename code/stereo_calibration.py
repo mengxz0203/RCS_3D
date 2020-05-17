@@ -22,8 +22,8 @@ def calibration(des='01', data_file='/Users/mengxiangzhen/Desktop/实验室/left
     objpoints_r = []
     imgpoints_r = []
 
-    images = glob.glob('../left1/*.jpg')
-    images_r = glob.glob('../right1/*.jpg')
+    images = glob.glob('../images/left1/*.jpg')
+    images_r = glob.glob('../images/right1/*.jpg')
     images.sort()
     images_r.sort()
 

@@ -17,7 +17,7 @@ def calibration(des='01'):
     objpoints = []  # 3d point in real world space
     imgpoints = []  # 2d points in image plane.
 
-    images = glob.glob('../left/*.jpg')
+    images = glob.glob('../images/left/*.jpg')
 
     for fname in images:
         img = cv2.imread(fname)
