@@ -1,17 +1,18 @@
+import template_match
 from config import FilePath
 
 
 class GetPath(object):
-    """
+
     def __init__(self,
                  template_image,
                  screen_image,
                  ):
         self.template_image = template_image
         self.screen_image = screen_image
-        # self.template_image_path = self.get_template_path(template_image)
-        # self.screen_image_path = self.get_screen_path(screen_image)
-    """
+        self.template_image_path = self.get_template_path(template_image)
+        self.screen_image_path = self.get_screen_path(screen_image)
+
     # 获取模板图片路径
     def get_template_path(self, template_image):
         template_dir = FilePath.template_image_dir(self)
@@ -58,6 +59,11 @@ class GetPath(object):
             open(dir_path + '/' + image)
         except FileNotFoundError as e:
             raise FileNotFoundError(e)
+
+    def match(self, algorithm):
+        # 选择算法
+        func = template_match.TEMPLATE_MATCHERS[algorithm](self.screen_image_path, self.template_image_path)
+        return func
 
 
 # 测试

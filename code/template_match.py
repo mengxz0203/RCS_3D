@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import math
 from image_process import show_image
-# from PIL import Image
+from PIL import Image
 
 MIN_MATCH_COUNT = 5  # 最低匹配点数
 MAX_LOOP_COUNT = 5  # 最大循环次数
@@ -45,7 +45,7 @@ class TemplateMatchResult(object):
 
 
 # BBS算法根据模板图像计算不同的权重
-def __patch_size(size):
+def patch_size(size):
     area = size[0] * size[1]
     if area < 2000:
         return 3
@@ -57,24 +57,23 @@ def __patch_size(size):
         return 7
 
 
-def read_template():
-    template = cv2.imread('../images/template/qq.png')
+def read_template(template_image_path):
+    template = cv2.imread(template_image_path)
     show_image(template)
     return template
 
 
-def read_target():
-    target = cv2.imread('../images/screen/processed.jpg')
+def read_target(screen_image_path):
+    screen = cv2.imread(screen_image_path)
     # target = cv.pyrDown(target)
     # target = cv.pyrDown(target)
-    show_image(target)
-    # cv2.waitKey(0)
-    # cv.imwrite('images/test.jpg', target)
-    return target
+    show_image(screen)
+    return screen
+
 
 
 # 分块直方图找相似位置
-def __block_difference(hist1, hist2):
+def block_difference(hist1, hist2):
     similarity = 0
 
     for i in range(len(hist1)):
@@ -87,7 +86,7 @@ def __block_difference(hist1, hist2):
 
 
 # 分块直方图发计算匹配相似度
-def __get_bhmatch_similarity():
+def get_bhmatch_similarity():
     target = read_target()
     template = read_template()
 
@@ -105,7 +104,7 @@ def __get_bhmatch_similarity():
     return similarity / 16
 
 
-def __bh_match_loop(screen_image, widget_image, loop_num):
+def bh_match_loop(screen_image, widget_image, loop_num):
     target = read_target()
     template = read_template()
     # 模板匹配循环，原图、控件、循环次数
@@ -205,7 +204,7 @@ def tm_ccoeff_match():
 
 
 # 归一化相关系数匹配法
-def tm_ccoeff_normed_mtach():
+def tm_ccoeff_normed_match():
     return opencv_template_match(cv2.TM_CCOEFF_NORMED)
 
 
@@ -304,5 +303,17 @@ def surf_match():
     return flann_based_match(surf)
 
 
-if __name__ == '__main__':
-    tm_ccoeff_match()
+# if __name__ == '__main__':
+#     tm_ccoeff_match()
+
+TEMPLATE_MATCHERS = {
+
+            'tcf': tm_ccoeff_match,
+            'tcfn': tm_ccoeff_normed_match,
+            'tcr': tm_ccorr_match,
+            'tcrn': tm_ccorr_normed_match,
+            'ts': tm_sqdiff_match,
+            'tsn': tm_sqdiff_normed_match,
+            'sift': sift_match,
+            'surf': surf_match
+}

@@ -117,3 +117,6 @@ def find_3d_screen_image_region(img):
 img = GetPath().get_origin_path('b.jpg')
 IMG = cv2.imread(img)
 find_3d_screen_image_region(IMG)
+
+
+
