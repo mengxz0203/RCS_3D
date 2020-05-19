@@ -18,6 +18,7 @@ class FilePath(object):
     # 屏幕区域图片绝对路径
     def screen_image_dir(self):
         image_dir = path.join(root, 'images/screen/')
+        print("path:", image_dir)
         if not os.path.exists(image_dir):
             os.makedirs(image_dir)
         return image_dir
@@ -45,4 +46,4 @@ class FilePath(object):
 
 
 # 测试
-FilePath.template_image_dir(self=None)
+# FilePath.template_image_dir()
