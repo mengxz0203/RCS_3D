@@ -58,7 +58,7 @@ def calibration(des='01', data_file='/Users/mengxiangzhen/Desktop/实验室/left
     ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints,
                                                        gray.shape[::-1], None,
                                                        None)
-    img = cv2.imread('../left1/left' + str(des) + '.jpg')
+    img = cv2.imread('../images/left1/left' + str(des) + '.jpg')
     h, w = img.shape[:2]
     newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1,
                                                       (w, h))
@@ -73,7 +73,7 @@ def calibration(des='01', data_file='/Users/mengxiangzhen/Desktop/实验室/left
                                                            imgpoints_r,
                                                            gray_r.shape[::-1],
                                                            None, None)
-    img_r = cv2.imread('../right1/right' + str(des) + '.jpg')
+    img_r = cv2.imread('../images/right1/right' + str(des) + '.jpg')
     h, w = img_r.shape[:2]
     newcameramtx_r, roi = cv2.getOptimalNewCameraMatrix(mtx_r, dist_r, (w, h),
                                                         1, (w, h))
@@ -109,16 +109,16 @@ def calibration(des='01', data_file='/Users/mengxiangzhen/Desktop/实验室/left
                                                          P2, gray.shape[::-1],
                                                          cv2.INTER_NEAREST)
 
-    img = cv2.imread('../left1/left' + str(des) + '.jpg')
+    img = cv2.imread('../images/left1/left' + str(des) + '.jpg')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    img = cv2.imread(('../right1/right' + str(des) + '.jpg'))
+    img = cv2.imread(('../images/right1/right' + str(des) + '.jpg'))
     gray_r = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     des_l = cv2.remap(gray, left_map1, left_map2, cv2.INTER_LINEAR)
-    cv2.imwrite('../result/stereo_calibresult/left' + str(des) + '.png', des_l)
+    cv2.imwrite('../images/result/stereo_calibresult/left' + str(des) + '.png', des_l)
     des_r = cv2.remap(gray_r, right_map1, right_map2, cv2.INTER_LINEAR)
-    cv2.imwrite('../result/stereo_calibresult/right' + str(des) + '.png', des_r)
+    cv2.imwrite('../images/result/stereo_calibresult/right' + str(des) + '.png', des_r)
 
     plt.subplot(121)
     plt.title('left')

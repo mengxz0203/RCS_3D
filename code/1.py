@@ -8,6 +8,7 @@ def read_template():
     # cv2.waitKey(0)
     return template
 
+
 def read_target():
     target = cv2.imread('images/1.jpg', 1)
     # target = cv.pyrDown(target)

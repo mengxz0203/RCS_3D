@@ -75,9 +75,9 @@ def calibration(**kwargs):
             objpoints.append(objp)
             objpoints_r.append(objp)
 
-            corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1),
+            corners2 = cv2.cornerSubPix(gray, corners, (9, 9), (-1, -1),
                                         criteria)
-            corners2_r = cv2.cornerSubPix(gray_r, corners_r, (11, 11), (-1, -1),
+            corners2_r = cv2.cornerSubPix(gray_r, corners_r, (9, 9), (-1, -1),
                                           criteria)
             imgpoints.append(corners2)
             imgpoints_r.append(corners2_r)
@@ -91,7 +91,7 @@ def calibration(**kwargs):
     ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints,
                                                        gray.shape[::-1], None,
                                                        None)
-    img = cv2.imread('../left/left' + str(opt.sample) + '.jpg')
+    img = cv2.imread('../images/left/left' + str(opt.sample) + '.jpg')
     h, w = img.shape[:2]
     newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1,
                                                       (w, h))
@@ -102,13 +102,13 @@ def calibration(**kwargs):
     x, y, w, h = roi
     dst = dst[y:y + h, x:x + w]
     if opt.disp_calib:
-        cv2.imwrite('../calibresult/left' + str(opt.sample) + '.png', dst)
+        cv2.imwrite('../images/result/calibresult/left' + str(opt.sample) + '.png', dst)
 
     ret, mtx_r, dist_r, rvecs, tvecs = cv2.calibrateCamera(objpoints_r,
                                                            imgpoints_r,
                                                            gray_r.shape[::-1],
                                                            None, None)
-    img_r = cv2.imread('../right/right' + str(opt.sample) + '.jpg')
+    img_r = cv2.imread('../images/right/right' + str(opt.sample) + '.jpg')
     h, w = img_r.shape[:2]
     newcameramtx_r, roi = cv2.getOptimalNewCameraMatrix(mtx_r, dist_r, (w, h),
                                                         1, (w, h))
@@ -119,7 +119,7 @@ def calibration(**kwargs):
     x, y, w, h = roi
     dst_r = dst_r[y:y + h, x:x + w]
     if opt.disp_calib:
-        cv2.imwrite('../calibresult/right' + str(opt.sample) + '.png', dst)
+        cv2.imwrite('../images/result/calibresult/right' + str(opt.sample) + '.png', dst)
 
     if not opt.stereo_calib:
         exit(0)
@@ -159,10 +159,10 @@ def calibration(**kwargs):
                                                          P2, gray.shape[::-1],
                                                          cv2.INTER_NEAREST)
 
-    img = cv2.imread('../left/left' + str(opt.sample) + '.jpg')
+    img = cv2.imread('../images/left/left' + str(opt.sample) + '.jpg')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    img = cv2.imread(('../right/right' + str(opt.sample) + '.jpg'))
+    img = cv2.imread(('../images/right/right' + str(opt.sample) + '.jpg'))
     gray_r = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     imgL = cv2.remap(gray, left_map1, left_map2, cv2.INTER_LINEAR)
@@ -170,10 +170,10 @@ def calibration(**kwargs):
 
     if opt.disp_stereo_calib:
         cv2.imwrite(
-            '../result/stereo_calibresult/left' + str(opt.sample) + '.png',
+            '../images/result/stereo_calibresult/left' + str(opt.sample) + '.png',
             imgL)
         cv2.imwrite(
-            '../result/stereo_calibresult/right' + str(opt.sample) + '.png',
+            '../images/result/stereo_calibresult/right' + str(opt.sample) + '.png',
             imgR)
 
         plt.subplot(121)
@@ -216,7 +216,7 @@ def calibration(**kwargs):
     if key == ord("q"):
         exit(0)
     elif key == ord("s"):
-        cv2.imwrite("../result/disparity/disparity"+opt.sample+".png", disp)
+        cv2.imwrite("../images/result/disparity/disparity"+opt.sample+".png", disp)
 
 
 

@@ -17,15 +17,15 @@ def take_photo():
     h = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
     flag = 0
-    while flag < 2:
+    while flag < 5:
         ret, frame = cap.read()
-        cv2.imshow("img", frame)
+        cv2.imshow('img', frame)
         left_img = frame[:, :mid]
         right_img = frame[:, mid:]
-        cv2.imshow("left_img", left_img)
-        cv2.imwrite("left.jpg", left_img)
-        cv2.imshow("right_img", right_img)
-        cv2.imwrite("right.jpg", right_img)
+        cv2.imshow('left_img', left_img)
+        cv2.imwrite('left.jpg', left_img)
+        cv2.imshow('right_img', right_img)
+        cv2.imwrite('right.jpg', right_img)
         flag = flag + 1
 
 
