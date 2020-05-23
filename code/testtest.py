@@ -29,6 +29,7 @@ class Config(object):
     # R = cv2.Rodrigues(om)[0]
     # print("test", R)
     # T = dict({'01': np.array([-58.9848, -0.4323, -4.6379])})  # 由 MATLAB 标定的平移矩阵
+
     matlab = False  # 在双目校正时是否使用 matlab 标定的值
     num = 3  # StereoSGBM_create 函数参数：最小可能的差异值
     blockSize = 5  # StereoSGBM_create 函数参数：匹配的块大小。
@@ -54,8 +55,8 @@ def calibration(**kwargs):
     objpoints_r = []
     imgpoints_r = []
 
-    images = glob.glob('../images/left1/*.jpg')
-    images_r = glob.glob('../images/right1/*.jpg')
+    images = glob.glob('../images/left/*.jpg')
+    images_r = glob.glob('../images/right/*.jpg')
     images.sort()
     images_r.sort()
 
@@ -96,7 +97,7 @@ def calibration(**kwargs):
     print('dist', dist)
     # print('rvecs', rvecs)
     # print('tvecs', tvecs)
-    img = cv2.imread('../images/left1/left' + str(opt.sample) + '.jpg')
+    img = cv2.imread('../images/left/left' + str(opt.sample) + '.jpg')
     h, w = img.shape[:2]
     newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1,
                                                       (w, h))
@@ -120,7 +121,7 @@ def calibration(**kwargs):
     print('dist_r', dist_r)
     # print('rvecs', rvecs)
     # print('tvecs', tvecs)
-    img_r = cv2.imread('../images/right1/right' + str(opt.sample) + '.jpg')
+    img_r = cv2.imread('../images/right/right' + str(opt.sample) + '.jpg')
     h, w = img_r.shape[:2]
     newcameramtx_r, roi = cv2.getOptimalNewCameraMatrix(mtx_r, dist_r, (w, h),
                                                         1, (w, h))
@@ -138,45 +139,23 @@ def calibration(**kwargs):
     if not opt.stereo_calib:
         exit(0)
 
-    retval, cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2, R, T, E, F = \
-        cv2.stereoCalibrate(objpoints, imgpoints, imgpoints_r, mtx,
-                            dist, mtx_r, dist_r, gray.shape[::-1])
+    R = np.array([[1, 4.9271, 0.0144], [-6.8177, 0.9999, 0.0132], [-0.0144, -0.0132, 0.9999]])
+    T = np.array([-61.6316, -0.8443, -11.6220])
+    R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(mtx, dist, mtx_r, dist_r, gray.shape[::-1], R, T)
 
-    print("retval", retval)
-    print("cameraMatrix1", cameraMatrix1)
-    print("cameraMatrix2", cameraMatrix2)
-    print("distCoeffs1", distCoeffs1)
-    print("distCoeffs2", distCoeffs2)
-    print("R", R)
-    print("T", T)
-    print("E", E)
-    print("F", F)
-
-
-    if opt.matlab:
-        try:
-            R = opt.R[opt.sample]
-            T = opt.T[opt.sample]
-        except:
-            print('Please modify config to add R and T for ' + opt.sample)
-
-    R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(
-        cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2,
-        gray.shape[::-1], R, T)
-
-    left_map1, left_map2 = cv2.initUndistortRectifyMap(cameraMatrix1,
-                                                       distCoeffs1, R1, P1,
+    left_map1, left_map2 = cv2.initUndistortRectifyMap(mtx,
+                                                       dist, R1, P1,
                                                        gray.shape[::-1],
                                                        cv2.INTER_NEAREST)
-    right_map1, right_map2 = cv2.initUndistortRectifyMap(cameraMatrix2,
-                                                         distCoeffs2, R2,
+    right_map1, right_map2 = cv2.initUndistortRectifyMap(mtx_r,
+                                                         dist_r, R2,
                                                          P2, gray.shape[::-1],
                                                          cv2.INTER_NEAREST)
 
-    img = cv2.imread('../images/left1/left' + str(opt.sample) + '.jpg')
+    img = cv2.imread('../images/left/left' + str(opt.sample) + '.jpg')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    img = cv2.imread(('../images/right1/right' + str(opt.sample) + '.jpg'))
+    img = cv2.imread(('../images/right/right' + str(opt.sample) + '.jpg'))
     gray_r = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     imgL = cv2.remap(gray, left_map1, left_map2, cv2.INTER_LINEAR)
