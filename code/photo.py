@@ -29,8 +29,8 @@ def take_photo():
         if key == ord('q'):
             break
         elif key == ord('s'):
-            cv2.imwrite('../images/test/left/left' + str(flag) + '.jpg', left_img)
-            cv2.imwrite('../images/test/right/right' + str(flag) + '.jpg', right_img)
+            cv2.imwrite('../images/test1/left/left' + str(flag) + '.jpg', left_img)
+            cv2.imwrite('../images/test1/right/right' + str(flag) + '.jpg', right_img)
             flag = flag + 1
 
     cap.release()
