@@ -16,20 +16,20 @@ class Config(object):
     disparity = True  # 是否利用视差估算距离
 
     # R = dict({'01': np.array([[1, -0.0032, -0.005], [0.0033, 0.9999, 0.0096],
-    #                           [0.0057, -0.0097, 0.9999]])})  # 由 MATLAB 标定的旋转矩阵
+    #                          [0.0057, -0.0097, 0.9999]])})  # 由 MATLAB 标定的旋转矩阵
     # T = dict({'01': np.array([-83.0973, 1.0605, 0.0392])})  # 由 MATLAB 标定的平移矩阵
 
     # R = dict({'01': np.array([[1, 4.9271, 0.0144], [-6.8177, 0.9999, 0.0132],
     #                           [-0.0144, -0.0132, 0.9999]])})  # 由 MATLAB 标定的旋转矩阵
     # T = dict({'01': np.array([-61.6316, -0.8443, -11.6220])})  # 由 MATLAB 标定的平移矩阵
     # TODO: 补充其他图像的R和T
-    R = dict({'01': np.array([[1, 9.4641, -5.2877], [-1.0470, 0.9998, -0.0191],
-                               [5.2687, 0.0191, 0.9999]])})  # 由 MATLAB 标定的旋转矩阵
+    # R = dict({'01': np.array([[1, 9.4641, -5.2877], [-1.0470, 0.9998, -0.0191],
+    #                           [5.2687, 0.0191, 0.9999]])})  # 由 MATLAB 标定的旋转矩阵
     # om = np.array([0.0168, -0.0047, -0.0000])
     # R = cv2.Rodrigues(om)[0]
     # print("test", R)
-    T = dict({'01': np.array([-58.9848, -0.4323, -4.6379])})  # 由 MATLAB 标定的平移矩阵
-    matlab = True  # 在双目校正时是否使用 matlab 标定的值
+    # T = dict({'01': np.array([-58.9848, -0.4323, -4.6379])})  # 由 MATLAB 标定的平移矩阵
+    matlab = False  # 在双目校正时是否使用 matlab 标定的值
     num = 3  # StereoSGBM_create 函数参数：最小可能的差异值
     blockSize = 5  # StereoSGBM_create 函数参数：匹配的块大小。
 
@@ -54,8 +54,8 @@ def calibration(**kwargs):
     objpoints_r = []
     imgpoints_r = []
 
-    images = glob.glob('../images/left/*.jpg')
-    images_r = glob.glob('../images/right/*.jpg')
+    images = glob.glob('../images/left1/*.jpg')
+    images_r = glob.glob('../images/right1/*.jpg')
     images.sort()
     images_r.sort()
 
@@ -91,7 +91,7 @@ def calibration(**kwargs):
     ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints,
                                                        gray.shape[::-1], None,
                                                        None)
-    img = cv2.imread('../images/left/left' + str(opt.sample) + '.jpg')
+    img = cv2.imread('../images/left1/left' + str(opt.sample) + '.jpg')
     h, w = img.shape[:2]
     newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1,
                                                       (w, h))
@@ -108,7 +108,7 @@ def calibration(**kwargs):
                                                            imgpoints_r,
                                                            gray_r.shape[::-1],
                                                            None, None)
-    img_r = cv2.imread('../images/right/right' + str(opt.sample) + '.jpg')
+    img_r = cv2.imread('../images/right1/right' + str(opt.sample) + '.jpg')
     h, w = img_r.shape[:2]
     newcameramtx_r, roi = cv2.getOptimalNewCameraMatrix(mtx_r, dist_r, (w, h),
                                                         1, (w, h))
@@ -159,10 +159,10 @@ def calibration(**kwargs):
                                                          P2, gray.shape[::-1],
                                                          cv2.INTER_NEAREST)
 
-    img = cv2.imread('../images/left/left' + str(opt.sample) + '.jpg')
+    img = cv2.imread('../images/left1/left' + str(opt.sample) + '.jpg')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    img = cv2.imread(('../images/right/right' + str(opt.sample) + '.jpg'))
+    img = cv2.imread(('../images/right1/right' + str(opt.sample) + '.jpg'))
     gray_r = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     imgL = cv2.remap(gray, left_map1, left_map2, cv2.INTER_LINEAR)
