@@ -9,7 +9,7 @@ import fire
 
 
 class Config(object):
-    sample = '13'  # 测试图片
+    sample = '11'  # 测试图片
     disp_calib = True  # 是否展示单目校正结果
     stereo_calib = True  # 是否进行双目校正
     disp_stereo_calib = True  # 是否展示双目校正结果
