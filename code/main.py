@@ -9,7 +9,7 @@ import fire
 
 
 class Config(object):
-    sample = '01'  # 测试图片
+    sample = '13'  # 测试图片
     disp_calib = True  # 是否展示单目校正结果
     stereo_calib = True  # 是否进行双目校正
     disp_stereo_calib = True  # 是否展示双目校正结果
@@ -44,8 +44,8 @@ def calibration(**kwargs):
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
     # 初始化角点数组
-    objp = np.zeros((6 * 9, 3), np.float32)
-    objp[:, :2] = np.mgrid[0:9, 0:6].T.reshape(-1, 2)
+    objp = np.zeros((6 * 8, 3), np.float32)
+    objp[:, :2] = np.mgrid[0:8, 0:6].T.reshape(-1, 2)
 
     # 存储图像点
     objpoints = []  # 世界坐标系
@@ -54,8 +54,8 @@ def calibration(**kwargs):
     objpoints_r = []
     imgpoints_r = []
 
-    images = glob.glob('../images/left1/*.jpg')
-    images_r = glob.glob('../images/right1/*.jpg')
+    images = glob.glob('../images/test/left/*.jpg')
+    images_r = glob.glob('../images/test/right/*.jpg')
     images.sort()
     images_r.sort()
 
@@ -67,8 +67,8 @@ def calibration(**kwargs):
         gray_r = cv2.cvtColor(img_r, cv2.COLOR_BGR2GRAY)
 
         # 寻找角点
-        ret, corners = cv2.findChessboardCorners(gray, (9, 6), None)
-        ret_r, corners_r = cv2.findChessboardCorners(gray_r, (9, 6), None)
+        ret, corners = cv2.findChessboardCorners(gray, (8, 6), None)
+        ret_r, corners_r = cv2.findChessboardCorners(gray_r, (8, 6), None)
 
         # 亚像素角点检测
         if ret == True and ret_r == True:
@@ -84,7 +84,7 @@ def calibration(**kwargs):
 
             # 显示角点
             if opt.disp_calib:
-                img = cv2.drawChessboardCorners(img, (9, 6), corners2, ret)
+                img = cv2.drawChessboardCorners(img, (8, 6), corners2, ret)
                 cv2.imshow('img', img)
                 cv2.waitKey(500)
 
@@ -96,7 +96,7 @@ def calibration(**kwargs):
     print('dist', dist)
     # print('rvecs', rvecs)
     # print('tvecs', tvecs)
-    img = cv2.imread('../images/left1/left' + str(opt.sample) + '.jpg')
+    img = cv2.imread('../images/test/left/left' + str(opt.sample) + '.jpg')
     h, w = img.shape[:2]
     newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1,
                                                       (w, h))
@@ -120,7 +120,7 @@ def calibration(**kwargs):
     print('dist_r', dist_r)
     # print('rvecs', rvecs)
     # print('tvecs', tvecs)
-    img_r = cv2.imread('../images/right1/right' + str(opt.sample) + '.jpg')
+    img_r = cv2.imread('../images/test/right/right' + str(opt.sample) + '.jpg')
     h, w = img_r.shape[:2]
     newcameramtx_r, roi = cv2.getOptimalNewCameraMatrix(mtx_r, dist_r, (w, h),
                                                         1, (w, h))
@@ -173,10 +173,10 @@ def calibration(**kwargs):
                                                          P2, gray.shape[::-1],
                                                          cv2.INTER_NEAREST)
 
-    img = cv2.imread('../images/left1/left' + str(opt.sample) + '.jpg')
+    img = cv2.imread('../images/test/left/left' + str(opt.sample) + '.jpg')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    img = cv2.imread(('../images/right1/right' + str(opt.sample) + '.jpg'))
+    img = cv2.imread(('../images/test/right/right' + str(opt.sample) + '.jpg'))
     gray_r = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     imgL = cv2.remap(gray, left_map1, left_map2, cv2.INTER_LINEAR)
